@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-gsap.registerPlugin(ScrollTrigger)
-
 const Blog = () => {
   const [email, setEmail] = useState('')
   const sectionRef = useRef()
@@ -12,28 +10,26 @@ const Blog = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(titleRef.current, {
-        y: 50,
-        opacity: 0,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 75%',
-          toggleActions: 'play none none none',
-        },
-      })
+      gsap.set(titleRef.current, { y: 50, opacity: 0 })
+      gsap.set(formRef.current, { y: 40, opacity: 0 })
 
-      gsap.from(formRef.current, {
-        y: 40,
-        opacity: 0,
-        duration: 1,
-        delay: 0.15,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 75%',
-          toggleActions: 'play none none none',
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: 'top 75%',
+        once: true,
+        onEnter: () => {
+          const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+
+          tl.to(titleRef.current, {
+            y: 0,
+            opacity: 1,
+            duration: 1,
+          })
+            .to(formRef.current, {
+              y: 0,
+              opacity: 1,
+              duration: 1,
+            }, '-=0.7')
         },
       })
     }, sectionRef)

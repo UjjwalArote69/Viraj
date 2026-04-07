@@ -3,24 +3,26 @@ import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-gsap.registerPlugin(ScrollTrigger)
-
 const Footer = () => {
   const footerRef = useRef()
   const contentRef = useRef()
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(contentRef.current.children, {
-        y: 30,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.12,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: footerRef.current,
-          start: 'top 90%',
-          toggleActions: 'play none none none',
+      gsap.set(contentRef.current.children, { y: 30, opacity: 0 })
+
+      ScrollTrigger.create({
+        trigger: footerRef.current,
+        start: 'top 90%',
+        once: true,
+        onEnter: () => {
+          gsap.to(contentRef.current.children, {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.12,
+            ease: 'power3.out',
+          })
         },
       })
     }, footerRef)

@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-gsap.registerPlugin(ScrollTrigger)
-
 const inquiries = [
   'Average Project Lead Time',
   'Certification & Compliance Standards',
@@ -15,7 +13,7 @@ const InquiryItem = ({ item, first }) => {
 
   return (
     <div
-      className={`inquiry-item flex items-center gap-4 py-5 border-b border-gray-200 cursor-pointer transition-all duration-300 ${first ? 'border-t' : ''} ${hovered ? 'pl-2' : 'pl-0'}`}
+      className={`flex items-center gap-4 py-5 border-b border-gray-200 cursor-pointer transition-all duration-300 ${first ? 'border-t' : ''} ${hovered ? 'pl-2' : 'pl-0'}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -28,31 +26,31 @@ const InquiryItem = ({ item, first }) => {
 const Careers = () => {
   const sectionRef = useRef()
   const headerRef = useRef()
+  const listRef = useRef()
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(headerRef.current, {
-        y: 30,
-        opacity: 0,
-        duration: 0.8,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 75%',
-          toggleActions: 'play none none none',
-        },
-      })
+      gsap.set(headerRef.current, { y: 30, opacity: 0 })
+      gsap.set(listRef.current.children, { x: -30, opacity: 0 })
 
-      gsap.from('.inquiry-item', {
-        x: -30,
-        opacity: 0,
-        duration: 0.6,
-        stagger: 0.1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 70%',
-          toggleActions: 'play none none none',
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: 'top 75%',
+        once: true,
+        onEnter: () => {
+          const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+
+          tl.to(headerRef.current, {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+          })
+            .to(listRef.current.children, {
+              x: 0,
+              opacity: 1,
+              duration: 0.6,
+              stagger: 0.1,
+            }, '-=0.4')
         },
       })
     }, sectionRef)
@@ -70,7 +68,7 @@ const Careers = () => {
           </p>
         </div>
 
-        <div className="flex flex-col">
+        <div ref={listRef} className="flex flex-col">
           {inquiries.map((item, i) => (
             <InquiryItem key={item} item={item} first={i === 0} />
           ))}
