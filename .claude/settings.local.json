@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/ujjwa/OneDLine/Desktop/Ujjwal/Work/Meka Websites/**)",
+      "Bash(find src/constants -type f)",
+      "Bash(npx vite *)"
+    ]
+  }
+}

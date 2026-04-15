@@ -1,13 +1,19 @@
-import Navbar from "./components/layout/Navbar";
-import Footer from "./components/layout/Footer";
-import LandingPage from "./pages/Landing/LandingPage";
+import React from 'react'
+import { Route, Routes } from 'react-router-dom'
+import Home from './pages/Landing/Home'
+import About from './pages/About'
 
-export default function App() {
+const App = () => {
   return (
-    <div className="font-dm">
-      <Navbar />
-      <LandingPage />
-      <Footer />
-    </div>
-  );
+    <>
+      <Routes>
+        <Route path='/' element={<Home/>}/>
+        <Route path='/about' element={<About/>}/>
+        <Route path='/' element={<Home/>}/>
+        <Route path='/' element={<Home/>}/>
+      </Routes>
+    </>
+  )
 }
+
+export default App
